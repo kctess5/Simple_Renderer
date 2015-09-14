@@ -66,7 +66,7 @@ fn main() {
 
         if i % 100 == 0 {
             // occasionally print t
-            println!("{}",t);
+            println!("t: {}",t);
         }
 
         camera.update();
