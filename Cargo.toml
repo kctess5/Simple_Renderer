@@ -1,0 +1,13 @@
+[package]
+
+name = "simple_renderer"
+version = "0.0.1"
+authors = [ "Corey Walsh <you@example.com>" ]
+
+[dependencies]
+glium = "*"
+genmesh = "*"
+clock_ticks = "*"
+glutin = "*"
+rand = "0.3"
+vecmath = "*"
