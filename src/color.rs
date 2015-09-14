@@ -1,6 +1,9 @@
 extern crate glutin;
 extern crate rand;
-// use self::rand::Rng;
+
+use self::glutin::Event::KeyboardInput;
+use self::glutin::ElementState::Pressed;
+use self::glutin::VirtualKeyCode;
 
 pub struct Color {
     data: [f32; 3]
@@ -18,10 +21,9 @@ impl Color {
 	pub fn randomize(&mut self) {
 		self.data = [rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>()];
 	}
-
 	pub fn process_input(&mut self, event: &glutin::Event) {
         match event {
-            &glutin::Event::KeyboardInput(glutin::ElementState::Pressed, _, Some(glutin::VirtualKeyCode::C)) => {
+            &KeyboardInput(Pressed, _, Some(VirtualKeyCode::C)) => {
                 self.randomize();
             },
             _ => {}

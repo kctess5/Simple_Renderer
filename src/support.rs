@@ -24,8 +24,6 @@ pub fn start_loop<F>(mut callback: F) where F: FnMut() -> Action {
         const FIXED_TIME_STAMP: u64 = 16666667;
         while accumulator >= FIXED_TIME_STAMP {
             accumulator -= FIXED_TIME_STAMP;
-
-            // if you have a game, update the state here
         }
 
         thread::sleep_ms(((FIXED_TIME_STAMP - accumulator) / 1000000) as u32);

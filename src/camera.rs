@@ -67,6 +67,7 @@ pub struct CameraState {
     mouse: (i32, i32),
     dx: i32,
     dy: i32,
+    velocity: f32,
     settings: FirstPersonSettings,
 }
 
@@ -84,6 +85,7 @@ impl CameraState {
             dy: 0i32,
             yaw: 0f32,
             pitch: 0f32,
+            velocity: 0.05f32,
             settings: FirstPersonSettings::keyboard_wasd(),
         }
     }
@@ -92,22 +94,20 @@ impl CameraState {
         let fov: f32 = 3.141592 / 2.0;
         let zfar = 1024.0;
         let znear = 0.1;
-
         let f = 1.0 / (fov / 2.0).tan();
 
         // note: remember that this is column-major, so the lines of code are actually columns
         [
-            [f / self.aspect_ratio,    0.0,              0.0              ,   0.0],
-            [         0.0         ,     f ,              0.0              ,   0.0],
-            [         0.0         ,    0.0,  (zfar+znear)/(znear-zfar)    ,  -1.0],
-            [         0.0         ,    0.0,  (2.0*zfar*znear)/(znear-zfar),   0.0],
+            [f / self.aspect_ratio, 0.0,              0.0              , 0.0],
+            [         0.0         , f ,               0.0              , 0.0],
+            [         0.0         , 0.0,  (zfar+znear)/(znear-zfar)    ,-1.0],
+            [         0.0         , 0.0,  (2.0*zfar*znear)/(znear-zfar), 0.0],
         ]
     }
 
     pub fn get_view(&self) -> [[f32; 4]; 4] {
         let f = vec3_normalized(self.forward);
         let up = self.up;
-        // (0.0, 1.0, 0.0);
         let _0: f32 = 0f32;
         let _1: f32 = 1f32;
 
@@ -171,7 +171,7 @@ impl CameraState {
 
     pub fn update(&mut self) {
         self.update_dir();
-        self.update_pos(0.2f32);
+        self.update_pos();
         // println!("{:?} {:?}", self.position, self.forward);
     }
 
@@ -195,39 +195,39 @@ impl CameraState {
         self.set_yaw_pitch();
     }
 
-    fn update_pos(&mut self, dt: f32) {
+    fn update_pos(&mut self) {
         if self.keys.contains(&self.settings.move_forward_button) {
-           let dist = -dt;
+           let dist = -self.velocity;
            let displacement = vec3_scale(self.forward, dist);
            self.position = vec3_add(displacement, self.position); 
         }
 
         if self.keys.contains(&self.settings.move_backward_button) {
-           let dist = dt;
+           let dist = self.velocity;
            let displacement = vec3_scale(self.forward, dist);
            self.position = vec3_add(displacement, self.position); 
         }
 
         if self.keys.contains(&self.settings.strafe_left_button) {
-           let dist = dt;
+           let dist = self.velocity;
            let displacement = vec3_scale(self.right, dist);
            self.position = vec3_add(displacement, self.position); 
         }
 
         if self.keys.contains(&self.settings.strafe_right_button) {
-           let dist = -dt;
+           let dist = -self.velocity;
            let displacement = vec3_scale(self.right, dist);
            self.position = vec3_add(displacement, self.position); 
         }
 
         if self.keys.contains(&self.settings.fly_up_button) {
-           let dist = dt;
+           let dist = self.velocity;
            let displacement = vec3_scale(self.up, dist);
            self.position = vec3_add(displacement, self.position); 
         }
 
         if self.keys.contains(&self.settings.fly_down_button) {
-           let dist = -dt;
+           let dist = -self.velocity;
            let displacement = vec3_scale(self.up, dist);
            self.position = vec3_add(displacement, self.position); 
         }

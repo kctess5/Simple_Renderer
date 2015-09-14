@@ -1,6 +1,8 @@
 extern crate glutin;
-// extern crate rand;
-// use self::rand::Rng;
+
+use self::glutin::Event::KeyboardInput;
+use self::glutin::ElementState::Pressed;
+use self::glutin::VirtualKeyCode;
 
 pub struct Light {
     data: [f32; 3]
@@ -17,19 +19,18 @@ impl Light {
 		self.data[0] += u;
 		self.data[1] += l;
 	}
-
 	pub fn process_input(&mut self, event: &glutin::Event) {
         match event {
-            &glutin::Event::KeyboardInput(glutin::ElementState::Pressed, _, Some(glutin::VirtualKeyCode::Left)) => {
+            &KeyboardInput(Pressed, _, Some(VirtualKeyCode::Left)) => {
                 self.nudge(0f32, -0.5f32);
             },
-            &glutin::Event::KeyboardInput(glutin::ElementState::Pressed, _, Some(glutin::VirtualKeyCode::Right)) => {
+            &KeyboardInput(Pressed, _, Some(VirtualKeyCode::Right)) => {
                 self.nudge(0f32, 0.5f32);
             },
-            &glutin::Event::KeyboardInput(glutin::ElementState::Pressed, _, Some(glutin::VirtualKeyCode::Up)) => {
+            &KeyboardInput(Pressed, _, Some(VirtualKeyCode::Up)) => {
                 self.nudge(0.5f32, 0f32);
             },
-            &glutin::Event::KeyboardInput(glutin::ElementState::Pressed, _, Some(glutin::VirtualKeyCode::Down)) => {
+            &KeyboardInput(Pressed, _, Some(VirtualKeyCode::Down)) => {
                 self.nudge(-0.5f32, 0f32);
             },
             _ => {}
