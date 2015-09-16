@@ -18,6 +18,7 @@ cargo build
 * **d**: right
 * **space**: forward
 * **left control**: backward
+* **enter/return**: move faster
 
 **Camera Rotation**
 
