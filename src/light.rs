@@ -10,7 +10,7 @@ pub struct Light {
 
 impl Light {
 	pub fn new() -> Light {
-		Light { data: [ 1.0, 1.0, 1.0f32] }
+		Light { data: [ 1.0, 1.0, -1.0f32] }
 	}
 	pub fn serialize(&mut self) -> [f32; 3] {
 		self.data
@@ -33,6 +33,18 @@ impl Light {
             &KeyboardInput(Pressed, _, Some(VirtualKeyCode::Down)) => {
                 self.nudge(-0.5f32, 0f32);
             },
+            // &KeyboardInput(Pressed, _, Some(VirtualKeyCode::A)) => {
+                // self.nudge(0f32, -0.5f32);
+            // },
+            // &KeyboardInput(Pressed, _, Some(VirtualKeyCode::D)) => {
+                // self.nudge(0f32, 0.5f32);
+            // },
+            // &KeyboardInput(Pressed, _, Some(VirtualKeyCode::W)) => {
+                // self.nudge(0.5f32, 0f32);
+            // },
+            // &KeyboardInput(Pressed, _, Some(VirtualKeyCode::S)) => {
+                // self.nudge(-0.5f32, 0f32);
+            // },
             _ => {}
         }
     }

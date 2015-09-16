@@ -19,6 +19,7 @@ Controls
 		d: right
 		space: forward
 		left control: backward
+		enter/return: move faster
 
 	Camera Rotation
 		click and drag with the mouse

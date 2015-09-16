@@ -19,8 +19,7 @@ fn main() {
 
     // load vertex buffer from std in
     let vertex_buffer = obj_loader::ObjBuffer::load_std().to_vertex_buffer(&display);
-
-    // // the program
+    
     let program = program!(&display,
         140 => {
             vertex: "
@@ -37,7 +36,6 @@ fn main() {
                     gl_Position = persp_matrix * view_matrix * vec4(v_position, 1.0);
                 }
             ",
-
             fragment: "
                 #version 140
                 uniform vec3 color_matrix;
@@ -51,25 +49,27 @@ fn main() {
                 }
             ",
         },
-    ).unwrap();
+    );
 
-    //
+    let program = match program {
+            Ok(x) => { x }
+            Err(_) => {
+                panic!("Malformed GPU Code.")
+            }
+        };
+
     let mut camera = camera::CameraState::new();
     let mut color = color::Color::new();
     let mut light = light::Light::new();
-    let (mut t, mut i) = (0.0f32, 0);
 
-    // the main loop
-    support::start_loop(|| {
-        t += 0.002;
-        i += 1;
-
-        if i % 100 == 0 {
+    // the main loop, 60 fps
+    support::start_loop(16666667, |t, i| {
+        if i % 60 == 0 {
             // occasionally print t
-            println!("t: {}",t);
+            println!("dt: {:?}, i: {:?}",t, i);
         }
 
-        camera.update();
+        camera.update(t);
 
         // building the uniforms
         let uniforms = uniform! {

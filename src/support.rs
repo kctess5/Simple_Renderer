@@ -7,25 +7,27 @@ pub enum Action {
     Continue,
 }
 
-pub fn start_loop<F>(mut callback: F) where F: FnMut() -> Action {
+pub fn start_loop<F>(time_stamp: u64, mut callback: F) where F: FnMut(f32, u32) -> Action {
     let mut accumulator = 0;
     let mut previous_clock = clock_ticks::precise_time_ns();
-
+    let mut i = 0;
     loop {
-        match callback() {
+        let now = clock_ticks::precise_time_ns();
+        let dt = now - previous_clock;
+        
+        match callback((dt as f32) / 1000000000f32, i) {
             Action::Stop => break,
             Action::Continue => ()
         };
 
-        let now = clock_ticks::precise_time_ns();
-        accumulator += now - previous_clock;
+        i += 1;
+        accumulator += dt;
         previous_clock = now;
 
-        const FIXED_TIME_STAMP: u64 = 16666667;
-        while accumulator >= FIXED_TIME_STAMP {
-            accumulator -= FIXED_TIME_STAMP;
+        while accumulator >= time_stamp {
+            accumulator -= time_stamp;
         }
 
-        thread::sleep_ms(((FIXED_TIME_STAMP - accumulator) / 1000000) as u32);
+        thread::sleep_ms(((time_stamp - accumulator) / 1000000) as u32);
     }
 }
